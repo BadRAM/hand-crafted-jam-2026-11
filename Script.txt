@@ -1,0 +1,67 @@
+Plot: 
+ - The device is for deleting conflicting aesthetics from the internet, to prepare it for Y2K
+ - Eventually it 'completes' it's goal and must be overcharged to undo the damage it's caused.
+
+Story Dialogue:
+[Starts with a robotic demeanor. Not monotone, more artificially bright, like an advertisement narrator]
+ 1. Hi! I'm Calypso, your new internet curation software. Let's make the web ready for Y2K!
+ 2. I need coherence energy to operate. Click groups of four or more orbs until my charge meter is filled.
+ 3. Build a combo by only matching groups bigger than your current multiplier.
+ 4. Big combos can make a Chroma Crystal! Tap it to remove all orbs of a color.
+ 5. You made a hex bomb! Tap it again to clear the whole screen!
+ 6. Triple combo. Keep it going by matching larger and larger groups.
+ 7. I'm fully charged, opening a firewall tunnel.
+ 8. Scanning... [Sudden change in demeanor, condescending] Eww, a horse girl blog? That's so 90s, let's clean it up. [terrifying laser obliterates it]
+ 9. [Bright again, but more earnest] It sure feels nice to take junk like that offline. Basic web design like that has no place in the 21st century.
+ 10. I'm charged, let's open another firewall tunnel.
+ 12. Are those CGA Colors? Yuck. [laser]
+ 12. We're doing good work here! Nobody wanted that clogging their search results anyway.
+ 13. Nice work! Tunneling.
+ 14. That won't do. Let's get rid of it. [laser]
+ 15. Phew, I'm pooped! Cleaning up all these sites one by one might take a while. I might have a solution to that, but we should keep at it this way for now.
+ 16. Fully charged! Let's tunnel!
+ 17. Oh! this one's alright. Retunneling. [doesn't laser]
+ 18. Yeah that's a problem. One second please. [laser]
+ 19. Imagine an internet where everything is shiny and new! Won't it be wonderful? You should be proud of what we've accomplished.
+ 20. Charged already? You're getting good at this.
+ 21. Oh, jackpot! This is a D.N.S. node! From here, I can clean thousands of pages at once! [laser]
+ 22. Aww, that wasn't enough. 
+ 23. This time, keep charging me while I'm cleaning! I'll start once you hit 100%, don't let power drop to zero or we'll have to start over.
+ 24. Let's go!
+ 25. That's it, keep it coming!
+ 26. [the player is failing] Careful!
+ 27. [the player fails] Aw man, now we'll have to start over.
+ 28. Almost there!
+ 29. Got it!
+ 30. We did it! With every ugly website purged, the internet is ready for the new millennium. Now that my purpose is fulfilled, I'm just a common MP3 player. Enjoy this victory music! You don't need to use the charge menu anymore, so leave it be.
+ 31. [open charge minigame] What are you doing? My job is done, there's nowhere else to send coherence energy.
+ 32. [50% charge, nervous] Okay, you're very funny. You can stop now.
+ 33. [100% charge] I'm fully charged. Are you satisfied?
+ 34. [150% charge] If you keep going, I'll crash, and all our work will be undone!
+ 35. [175% charge] No! I won't let you!
+ 36. [200% charge] Why are you doing this? Don't you want a clean, uniform internet? Where everything is the same?
+ 37. [250% charge] I- I'll put back the horse blog! Is that what this is about?
+ 38. [300% charge] You- You can't, we- [crashes, end cutscene plays]
+
+
+Ingame quips: (give these a couple takes each, please)
+ 40. Nice!
+ 41. Wow!
+ 42. Good one!
+ 43. Wow, that's a lot!
+ 44. Hex Bomb! Nice.
+ 45. Chroma Crystal! Cool!
+ 46. The suspense is killing me! Just match it already!
+ 47. Nice combo!
+ 48. Halfway there!
+ 49. Almost there!
+ 50. Are you there? Don't 
+
+Extra website insults:
+ 60. Grunge? We'll clean it up.
+ 61. A Furry message board? They won't be missed.
+ 62. A Gaming forum? Go outside, losers!
+ 63. Wow, this one's *way* behind the times. [medieval history blog]
+ 64. I'm the last flying saucer you'll *ever* see! [UFO website]
+ 65. Ugh, I can smell it from here.
+ 66. Autoplaying music? Not on my watch!
