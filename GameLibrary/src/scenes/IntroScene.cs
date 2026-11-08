@@ -22,13 +22,13 @@ public class IntroScene : Scene
     public override void Update()
     {
         DoPulses();
-
+        
         bool cheat = Raylib.IsKeyPressed(KeyboardKey.G);
-
+        
         if (Raylib.IsKeyPressed(KeyboardKey.A)) _aPressed = true;
         if (Raylib.IsKeyPressed(KeyboardKey.C)) _cPressed = true;
         if (Raylib.IsKeyPressed(KeyboardKey.D)) _dPressed = true;
-
+        
         if (_aPressed && _cPressed && _dPressed && _step < 3)
         {
             Game.MoveDevice(new Vector2(360, 360), 1, 2, Easings.InOutSine);

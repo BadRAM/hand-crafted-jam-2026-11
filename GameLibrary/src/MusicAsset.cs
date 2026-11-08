@@ -41,7 +41,11 @@ public class MusicAsset
         Raylib.StopMusicStream(Music);
     }
 
-    public float Beat() => (Raylib.GetMusicTimePlayed(Music) - FirstBeat) * (BeatsPerMinute / 60);
+    public float Beat()
+    {
+        float time = Raylib.GetMusicTimePlayed(Music);
+        return (time - FirstBeat) * (BeatsPerMinute / 60f);
+    }
 
     public float Pulse(float width) => Easings.Map(MathF.Max(width, MathF.Abs(Beat() % 1 - 0.5f) * 2), width, 1f, 0f, 1f);
 

@@ -95,8 +95,8 @@ public class GameScene : Scene
         
         // if (Raylib.IsKeyDown(KeyboardKey.A)) Raylib.ClearBackground(new Color(32, 32, 32, 255));
         
-        BackgroundDraw.CirclePulse(Math.Max(0, Mixer.Beat() / 4 - 0.5f) % 1);
-        BackgroundDraw.CirclePulse(Math.Max(0, Mixer.Beat() / 4 - 0.0f) % 1);
+        BackgroundDraw.CirclePulse(MathF.Max(0, Mixer.Beat() / 4f - 0.5f) % 1f);
+        BackgroundDraw.CirclePulse(MathF.Max(0, Mixer.Beat() / 4f - 0.0f) % 1f);
         BackgroundDraw.Waveform2();
 
         int ballFreq = _combo >= 2 && _balls.Count < 200 ? 5 : 10;

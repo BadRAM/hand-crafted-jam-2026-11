@@ -43,9 +43,12 @@ public class MainMenu : Scene
         BackgroundDraw.Web();
         
         if (Raylib.IsKeyDown(KeyboardKey.A)) Raylib.ClearBackground(new Color(32, 32, 32, 255));
-        
-        BackgroundDraw.CirclePulse(Math.Max(0, Mixer.Beat() / 4 - 0.5f) % 1);
-        BackgroundDraw.CirclePulse(Math.Max(0, Mixer.Beat() / 4 - 0.0f) % 1);
+
+        float beat = Mixer.Beat();
+        float pulseA = MathF.Max(0, beat / 4f - 0.5f) % 1f;
+        float PulseB = MathF.Max(0, beat / 4f - 0.0f) % 1f;
+        BackgroundDraw.CirclePulse(pulseA);
+        BackgroundDraw.CirclePulse(PulseB);
         BackgroundDraw.Waveform2();
         
         Resources.Sprites["cd"].DrawCentered(360, 360, Resources.Sprites["cd"].Size/2, rotation: Time.Scaled * 60);

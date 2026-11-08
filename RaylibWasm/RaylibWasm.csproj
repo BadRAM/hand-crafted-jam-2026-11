@@ -11,39 +11,35 @@
     <EnableAggressiveTrimming>true</EnableAggressiveTrimming>
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>full</TrimMode>
-    <RunAOTCompilation>true</RunAOTCompilation>
     <WasmBuildNative>true</WasmBuildNative>
-    <WasmNativeStrip>true</WasmNativeStrip>
     <WasmAllowUndefinedSymbols>true</WasmAllowUndefinedSymbols>
+    
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+    <DefineConstants>$(DefineConstants);BROWSER</DefineConstants>
+
+    <EmccFlags>$(EmccFlags) -sALLOW_MEMORY_GROWTH=1 -sINITIAL_MEMORY=64MB</EmccFlags>
+
+    <!-- Optimization higher than -O1 causes build failure? -->
+    <EmccLinkOptimizationFlag>-O1</EmccLinkOptimizationFlag>
+    <EmccCompileOptimizationFlag>-O1</EmccCompileOptimizationFlag>
+    <WasmNativeStrip>false</WasmNativeStrip>
+    <WasmEmitSymbolMap>false</WasmEmitSymbolMap>
+
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Box2D.NET" Version="3.1.654" />
-    <PackageReference Include="Raylib-cs" Version="7.0.2" />
+    <PackageReference Include="Raylib-cs" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <WasmExtraFilesToDeploy Include="index.html" />
     <WasmExtraFilesToDeploy Include="main.js" />
-    <NativeFileReference Include="raylib.a" />
+    <!--<WasmExtraFilesToDeploy Include="..\Raylib-cs\logo\raylib-cs.ico" TargetPath="favicon.ico"/>-->
     <WasmFilesToIncludeInFileSystem Include="..\GameLibrary\resource\**\*.*" TargetPath="resource\%(RecursiveDir)\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GameLibrary\GameLibrary.csproj" />
   </ItemGroup>
-
-  <Choose>
-    <When Condition=" $(Configuration) == 'Debug' ">
-      <PropertyGroup>
-        <WasmEmitSymbolMap>true</WasmEmitSymbolMap>
-        <EmccFlags>-sUSE_GLFW=3 -sVERBOSE=1 -Wbad-function-cast -Wcast-function-type -O2 -g3 -sINITIAL_MEMORY=128MB -sMAXIMUM_MEMORY=2048MB -sALLOW_MEMORY_GROWTH=1 -lexports.js</EmccFlags>
-      </PropertyGroup>
-    </When>
-    <When Condition=" $(Configuration) == 'Release' ">
-      <PropertyGroup>
-        <EmccFlags>-s USE_GLFW=3 -O3 -lexports.js</EmccFlags>
-      </PropertyGroup>
-    </When>
-  </Choose>
 </Project>

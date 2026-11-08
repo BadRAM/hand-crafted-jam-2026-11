@@ -176,11 +176,13 @@ public static class Game
         Rlgl.SetBlendFactorsSeparate(Rlgl.ZERO, Rlgl.ONE, Rlgl.ONE, Rlgl.ZERO, Rlgl.FUNC_ADD, Rlgl.FUNC_ADD);
         Raylib.DrawRectangle(0, 0, 720, 720, Color.White);
         Raylib.EndBlendMode();
-
+        
         if (Time.Frame == 1)
         {
             Raylib.ClearBackground(Color.Blank);
         }
+        
+        Raylib.DrawFPS(0, 0);
         
         Raylib.EndDrawing();
         
