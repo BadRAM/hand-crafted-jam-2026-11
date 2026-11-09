@@ -1,24 +1,22 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Box2D.NET;
-using GameLibrary;
-using static Box2D.NET.B2Joints;
-using static Box2D.NET.B2Ids;
-using static Box2D.NET.B2Types;
-using static Box2D.NET.B2MathFunction;
-using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Shapes;
-using static Box2D.NET.B2Worlds;
-using static Box2D.NET.B2Geometries;
-using static Box2D.NET.B2Diagnostics;
+using Box2D;
 using Raylib_cs;
 
 namespace GameLibrary;
 
+using System.Runtime.InteropServices.JavaScript;
+
+internal static partial class BrowserLog
+{
+    [JSImport("globalThis.console.error")]
+    internal static partial void Error(string message);
+}
+
 public class GameScene : Scene
 {
-    private B2WorldId WorldId;
-    private static B2DebugDraw _debugDraw = Box2dDebugDrawRaylib.Create();
+    private World Box2dWorld;
+    private static DebugDraw _debugDraw = Box2dDebugDrawRaylib.Create();
     float timeStep = 1.0f / 60.0f;
     int subStepCount = 4;
     
@@ -43,11 +41,29 @@ public class GameScene : Scene
     
     public GameScene()
     {
-        B2WorldDef worldDef = b2DefaultWorldDef();
+        try
+        {
+            BrowserLog.Error("Before WorldDef");
+
+            var def = new Box2D.WorldDef();
+
+            BrowserLog.Error("After WorldDef");
+
+            var world = new Box2D.World(def);
+
+            BrowserLog.Error("After World creation");
+        }
+        catch (Exception ex)
+        {
+            BrowserLog.Error("ENTERED CATCH");
+            BrowserLog.Error(ex.ToString());
+        }
         
-        worldDef.gravity = new B2Vec2(0.0f, 0.0f);
-        worldDef.hitEventThreshold = 15f;
-        WorldId = b2CreateWorld(worldDef);
+        WorldDef worldDef = WorldDef.Default;
+        
+        worldDef.Gravity = new Vector2(0.0f, 0.0f);
+        worldDef.HitEventThreshold = 15f;
+        Box2dWorld = World.CreateWorld(worldDef);
         
         Assets.Dialogues[2].PlayIfUnheard(true);
 
@@ -95,8 +111,8 @@ public class GameScene : Scene
         
         // if (Raylib.IsKeyDown(KeyboardKey.A)) Raylib.ClearBackground(new Color(32, 32, 32, 255));
         
-        BackgroundDraw.CirclePulse(MathF.Max(0, Mixer.Beat() / 4f - 0.5f) % 1f);
-        BackgroundDraw.CirclePulse(MathF.Max(0, Mixer.Beat() / 4f - 0.0f) % 1f);
+        BackgroundDraw.CirclePulse(Math.Max(0, Mixer.Beat() / 4 - 0.5f) % 1);
+        BackgroundDraw.CirclePulse(Math.Max(0, Mixer.Beat() / 4 - 0.0f) % 1);
         BackgroundDraw.Waveform2();
 
         int ballFreq = _combo >= 2 && _balls.Count < 200 ? 5 : 10;
@@ -106,9 +122,9 @@ public class GameScene : Scene
             MakeBall(pos, Ball.RandomDefaultType());
         }
         
-        b2World_Step(WorldId, timeStep, subStepCount);
+        Box2dWorld.Step(timeStep, subStepCount);
 
-        B2ContactEvents contactEvents = b2World_GetContactEvents(WorldId);
+        ContactEvents contactEvents = Box2dWorld.ContactEvents;
 
         List<Ball> outOfBoundsBalls = new List<Ball>();
         
@@ -120,27 +136,27 @@ public class GameScene : Scene
             Vector2 delta = new Vector2(36f, 36f) - ball.Position;
             if (delta.Length() > 45f) outOfBoundsBalls.Add(ball);
             Vector2 g = Vector2.Normalize(delta) * gravityScale;
-            b2Body_ApplyForce(ball.Body, g.ToB2(), ball.Position.ToB2(), true);
+            ball.Body.ApplyForce(g, ball.Position, true);
         }
         
         foreach (Ball ball in outOfBoundsBalls)
         {
             _score += 10 * _combo;
-            b2DestroyBody(ball.Body);
+            ball.Body.Destroy();
             _balls.Remove(ball);
         }
         
-        for (var i = 0; i < contactEvents.hitCount; i++)
+        for (var i = 0; i < contactEvents.HitEvents.Length; i++)
         {
-            var contact = contactEvents.hitEvents[i];
+            var contact = contactEvents.HitEvents[i];
             // Raylib.DrawCircleV(contact.point.ToVec2() * 10, 3, new Color(255, 0, 0, 192));
             float volume = 0.3f;
-            if      (contact.approachSpeed > 40) { Resources.Sounds["collision1"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 1f   * volume); }
-            else if (contact.approachSpeed > 35) { Resources.Sounds["collision2"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.9f * volume); }
-            else if (contact.approachSpeed > 30) { Resources.Sounds["collision3"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.8f * volume); }
-            else if (contact.approachSpeed > 25) { Resources.Sounds["collision4"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.7f * volume); }
-            else if (contact.approachSpeed > 20) { Resources.Sounds["collision5"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.6f * volume); }
-            else                                 { Resources.Sounds["collision6"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.5f * volume); }
+            if      (contact.ApproachSpeed > 40) { Resources.Sounds["collision1"].PlayRandomPitch(-(contact.Point.X / 72), 1f, 1f   * volume); }
+            else if (contact.ApproachSpeed > 35) { Resources.Sounds["collision2"].PlayRandomPitch(-(contact.Point.X / 72), 1f, 0.9f * volume); }
+            else if (contact.ApproachSpeed > 30) { Resources.Sounds["collision3"].PlayRandomPitch(-(contact.Point.X / 72), 1f, 0.8f * volume); }
+            else if (contact.ApproachSpeed > 25) { Resources.Sounds["collision4"].PlayRandomPitch(-(contact.Point.X / 72), 1f, 0.7f * volume); }
+            else if (contact.ApproachSpeed > 20) { Resources.Sounds["collision5"].PlayRandomPitch(-(contact.Point.X / 72), 1f, 0.6f * volume); }
+            else                                 { Resources.Sounds["collision6"].PlayRandomPitch(-(contact.Point.X / 72), 1f, 0.5f * volume); }
             // Console.WriteLine($"BALLS COLLIDING with speed:{contact.approachSpeed:N5} at: {contact.point.ToVec2()}");
         }
 
@@ -217,7 +233,7 @@ public class GameScene : Scene
             
             foreach (Ball ball in ballsToRemove)
             {
-                b2DestroyBody(ball.Body);
+                ball.Body.Destroy();
                 _balls.Remove(ball);
             }
         }
@@ -276,12 +292,12 @@ public class GameScene : Scene
                         }
                     }
                     
-                    B2ExplosionDef explode = b2DefaultExplosionDef();
-                    explode.position = hoveredBall.Position.ToB2();
-                    explode.radius = 20;
-                    explode.impulsePerLength = 200;
+                    ExplosionDef explode = new ExplosionDef();
+                    explode.Position = hoveredBall.Position;
+                    explode.Radius = 20;
+                    explode.ImpulsePerLength = 200;
                     
-                    b2World_Explode(WorldId, explode);
+                    Box2dWorld.Explode(explode);
                     
                     Resources.Sounds["bomb"].Play();
 
@@ -309,7 +325,7 @@ public class GameScene : Scene
                 col = Raylib.ColorAlpha(col, 0.25f);
                 foreach (Ball ball in mergeBalls)
                 {
-                    Vector2 pos = b2Body_GetWorldCenterOfMass(ball.Body).ToVec2() * 10;
+                    Vector2 pos = ball.Body.WorldCenterOfMass * 10;
                     Resources.Sprites["mask"].DrawCentered(pos, new Vector2(28, 28), tint: col);
                 }
             }
@@ -337,7 +353,7 @@ public class GameScene : Scene
         
         foreach (Ball ball in ballsToMerge)
         {
-            b2DestroyBody(ball.Body);
+            ball.Body.Destroy();
             _balls.Remove(ball);
         }
     }
@@ -381,8 +397,8 @@ public class GameScene : Scene
         Vector2 cursorPos = Game.GetCursorPosOnDevice() / 10f;
         foreach (Ball ball in _balls)
         {
-            B2Vec2 pos = b2Body_GetWorldCenterOfMass(ball.Body);
-            float dist = Vector2.Distance(pos.ToVec2(), cursorPos);
+            Vector2 pos = ball.Body.WorldCenterOfMass;
+            float dist = Vector2.Distance(pos, cursorPos);
             if (dist < nearestBall.Value)
             {
                 nearestBall = new KeyValuePair<Ball?, float>(ball, dist);
@@ -436,13 +452,13 @@ public class GameScene : Scene
     
     private List<Ball> GetNeighbors(Ball centerBall, List<Ball> validBalls)
     {
-        Vector2 pos = b2Body_GetWorldCenterOfMass(centerBall.Body).ToVec2();
-        return validBalls.Where(b => b != centerBall && Raylib.CheckCollisionCircles(b2Body_GetWorldCenterOfMass(b.Body).ToVec2(), 1.6f, pos, 1.6f)).ToList();
+        Vector2 pos = centerBall.Body.WorldCenterOfMass;
+        return validBalls.Where(b => b != centerBall && Raylib.CheckCollisionCircles(b.Body.WorldCenterOfMass, 1.6f, pos, 1.6f)).ToList();
     }
     
     public void Destroy()
     {
-        b2DestroyWorld(WorldId);
+        Box2dWorld.Destroy();
     }
     
     public int GetScore() => _score;
@@ -451,33 +467,33 @@ public class GameScene : Scene
 
     private void MakeBall(Vector2 pos, Ball.Type ballType)
     {
-        B2BodyDef bodyDef = b2DefaultBodyDef();
-        bodyDef.type = B2BodyType.b2_dynamicBody;
-        bodyDef.position = new B2Vec2(0, 0);
-        bodyDef.linearDamping = 0.05f;
-        B2BodyId bodyId = b2CreateBody(WorldId, bodyDef);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.Type = BodyType.Dynamic;
+        bodyDef.Position = new Vector2(0, 0);
+        bodyDef.LinearDamping = 0.05f;
+        Body body = Box2dWorld.CreateBody(bodyDef);
         
-        B2Circle dynamicCircle;
-        dynamicCircle.center = pos.ToB2();
-        dynamicCircle.radius = 1.4f;
+        Circle dynamicCircle;
+        dynamicCircle.Center = pos;
+        dynamicCircle.Radius = 1.4f;
         
-        B2ShapeDef shapeDef = b2DefaultShapeDef();
-        shapeDef.enableHitEvents = true;
-        shapeDef.density = 1.0f;
-        shapeDef.material.friction = 0.3f;
-        shapeDef.material.restitution = 0.75f;
-        
-        b2CreateCircleShape(bodyId, shapeDef, dynamicCircle);
-        _balls.Add(new Ball(bodyId, ballType));
+        ShapeDef shapeDef = new ShapeDef();
+        shapeDef.EnableHitEvents = true;
+        shapeDef.Density = 1.0f;
+        shapeDef.Material.Friction = 0.3f;
+        shapeDef.Material.Restitution = 0.75f;
+
+        body.CreateShape(shapeDef, dynamicCircle);
+        _balls.Add(new Ball(body, ballType));
     }
     
     public class Ball
     {
-        public B2BodyId Body;
+        public Body Body;
         public Type BallType;
         public Vector2 Position;
         
-        public float Rotation => b2Rot_GetAngle(b2Body_GetRotation(Body)) * 180 / MathF.PI;
+        public float Rotation => Body.Rotation.GetAngle() * 180 / MathF.PI;
         
         private static readonly Type[] DefaultTypes = { Type.Red, Type.Blue, Type.Yellow, Type.Purple };
         public static Type RandomDefaultType() => DefaultTypes[Random.Shared.Next(DefaultTypes.Length)];
@@ -495,7 +511,7 @@ public class GameScene : Scene
             PurpleCrystal
         }
 
-        public Ball(B2BodyId body, Type ballType)
+        public Ball(Body body, Type ballType)
         {
             Body = body;
             BallType = ballType;
@@ -505,7 +521,7 @@ public class GameScene : Scene
         
         public void Draw()
         {
-            Position = b2Body_GetWorldCenterOfMass(Body).ToVec2();
+            Position = Body.WorldCenterOfMass;
             Vector2 pos = Position * 10;
             Vector2 size = new Vector2(28, 28);
             Sprite baseSprite = Resources.Sprites["orb_base"];
@@ -615,101 +631,101 @@ public class GameScene : Scene
     
     static class Box2dDebugDrawRaylib
     {
-        public static B2DebugDraw Create()
+        public static DebugDraw Create()
         {
-            var debugDraw = b2DefaultDebugDraw();
-            debugDraw.DrawPolygonFcn = DrawPolygon;
-            debugDraw.DrawSolidPolygonFcn = DrawSolidPolygon;
-            debugDraw.DrawCircleFcn = DrawCircle;
-            debugDraw.DrawSolidCircleFcn = DrawSolidCircle;
-            debugDraw.DrawSolidCapsuleFcn = DrawSolidCapsule;
-            debugDraw.drawLineFcn = DrawSegment;
-            debugDraw.DrawTransformFcn = DrawTransform;
-            debugDraw.DrawPointFcn = DrawPoint;
-            debugDraw.DrawStringFcn = DrawString;
-
-            debugDraw.drawShapes = true;
-            debugDraw.drawJoints = true;
-            debugDraw.drawJointExtras = true;
-            // debugDraw.drawBounds = true;
-            debugDraw.drawMass = true;
-            debugDraw.drawBodyNames = true;
-            debugDraw.drawGraphColors = true;
-            debugDraw.drawContactNormals = true;
-            // debugDraw.drawContactForces = true;
-            // debugDraw.drawContactFeatures = true;
-            // debugDraw.drawFrictionForces = true;
-            debugDraw.drawIslands = true;
+            var debugDraw = new DebugDrawSimple();
+            // debugDraw.DrawPolygon = DrawPolygon;
+            // debugDraw.DrawSolidPolygon = DrawSolidPolygon;
+            // debugDraw.DrawCircle = DrawCircle;
+            // debugDraw.DrawSolidCircle = DrawSolidCircle;
+            // debugDraw.DrawSolidCapsule = DrawSolidCapsule;
+            // debugDraw.DrawSegment = DrawSegment;
+            // debugDraw.DrawTransform = DrawTransform;
+            // debugDraw.DrawPoint = DrawPoint;
+            // debugDraw.DrawString = DrawString;
+            //
+            // debugDraw.drawShapes = true;
+            // debugDraw.drawJoints = true;
+            // debugDraw.drawJointExtras = true;
+            // // debugDraw.drawBounds = true;
+            // debugDraw.drawMass = true;
+            // debugDraw.drawBodyNames = true;
+            // debugDraw.drawGraphColors = true;
+            // debugDraw.drawContactNormals = true;
+            // // debugDraw.drawContactForces = true;
+            // // debugDraw.drawContactFeatures = true;
+            // // debugDraw.drawFrictionForces = true;
+            // debugDraw.drawIslands = true;
 
             return debugDraw;
         }
         
-        private static void DrawPolygon(ReadOnlySpan<B2Vec2> vertices, int vertexCount, B2HexColor color, object o)
-        {
-            for (int i = 0; i < vertexCount; i++)
-            {
-                Raylib.DrawLineV(vertices[i].ToVec2(), vertices[(i + 1) % vertexCount].ToVec2(), color.ToRaylib());
-            }
-        }
-        
-        private static void DrawSolidPolygon(in B2Transform transform, ReadOnlySpan<B2Vec2> vertices, int vertexCount, float radius, B2HexColor color, object o)
-        {
-            Vector2[] verts = vertices.ToArray().Select(v => v.ToVec2()).ToArray();
-
-            for (var i = 0; i < verts.Length; i++)
-            {
-                verts[i] = new Vector2(verts[i].X * transform.q.c - verts[i].Y * transform.q.s, verts[i].X * transform.q.s + verts[i].Y * transform.q.c);
-                verts[i] += transform.p.ToVec2();
-            }
-            for (int i = 0; i < vertexCount; i++)
-            {
-                Raylib.DrawLineV(verts[i], verts[(i + 1) % vertexCount], color.ToRaylib());
-            }
-        }
-        
-        private static void DrawCircle(in B2Vec2 center, float radius, B2HexColor color, object o)
-        {
-            Raylib.DrawCircleLinesV(center.ToVec2(), radius, color.ToRaylib());
-        }
-        
-        private static void DrawSolidCircle(in B2Transform transform, float radius, B2HexColor color, object o)
-        {
-            Vector2 center = transform.p.ToVec2();
-            Raylib.DrawCircleV(center, radius, Raylib.ColorAlpha(color.ToRaylib(), 0.25f));
-            Raylib.DrawCircleLinesV(center, radius, color.ToRaylib());
-            Raylib.DrawLineV(center, center + new Vector2(transform.q.c, transform.q.s) * radius, color.ToRaylib());
-        }
-        
-        private static void DrawSolidCapsule(in B2Vec2 point1, in B2Vec2 point2, float radius, B2HexColor color, object o)
-        {
-            Vector2 p1 = point1.ToVec2();
-            Vector2 p2 = point2.ToVec2();
-            Raylib.DrawCircleV(p1, radius, color.ToRaylib());
-            Raylib.DrawCircleV(p2, radius, color.ToRaylib());
-            Raylib.DrawLineEx(p1, p2, radius, color.ToRaylib());
-        }
-        
-        private static void DrawSegment(in B2Vec2 point1, in B2Vec2 point2, B2HexColor color, object o)
-        {
-            Vector2 p1 = point1.ToVec2();
-            Vector2 p2 = point2.ToVec2();
-            Raylib.DrawLineV(p1, p2, color.ToRaylib());
-        }
-        
-        private static void DrawTransform(in B2Transform transform, object o)
-        {
-            DrawSolidCircle(transform, 4, B2HexColor.b2_colorAqua, o);
-        }
-        
-        private static void DrawPoint(in B2Vec2 point, float size, B2HexColor color, object o)
-        {
-            Raylib.DrawCircleV(point.ToVec2(), size, color.ToRaylib());
-        }
-        
-        private static void DrawString(in B2Vec2 point, string s, B2HexColor color, object o)
-        {
-            Vector2 p = point.ToVec2();
-            Raylib.DrawText(s, (int)p.X, (int)p.Y, 4, color.ToRaylib());
-        }
+        // private static void DrawPolygon(ReadOnlySpan<Vector2> vertices, HexColor color)
+        // {
+        //     for (int i = 0; i < vertices.Length; i++)
+        //     {
+        //         Raylib.DrawLineV(vertices[i].ToVec2(), vertices[(i + 1) % vertices.Length], color.ToRaylib());
+        //     }
+        // }
+        //
+        // private static void DrawSolidPolygon(in B2Transform transform, ReadOnlySpan<B2Vec2> vertices, int vertexCount, float radius, B2HexColor color, object o)
+        // {
+        //     Vector2[] verts = vertices.ToArray().Select(v => v.ToVec2()).ToArray();
+        //
+        //     for (var i = 0; i < verts.Length; i++)
+        //     {
+        //         verts[i] = new Vector2(verts[i].X * transform.q.c - verts[i].Y * transform.q.s, verts[i].X * transform.q.s + verts[i].Y * transform.q.c);
+        //         verts[i] += transform.p.ToVec2();
+        //     }
+        //     for (int i = 0; i < vertexCount; i++)
+        //     {
+        //         Raylib.DrawLineV(verts[i], verts[(i + 1) % vertexCount], color.ToRaylib());
+        //     }
+        // }
+        //
+        // private static void DrawCircle(in B2Vec2 center, float radius, B2HexColor color, object o)
+        // {
+        //     Raylib.DrawCircleLinesV(center.ToVec2(), radius, color.ToRaylib());
+        // }
+        //
+        // private static void DrawSolidCircle(in B2Transform transform, float radius, B2HexColor color, object o)
+        // {
+        //     Vector2 center = transform.p.ToVec2();
+        //     Raylib.DrawCircleV(center, radius, Raylib.ColorAlpha(color.ToRaylib(), 0.25f));
+        //     Raylib.DrawCircleLinesV(center, radius, color.ToRaylib());
+        //     Raylib.DrawLineV(center, center + new Vector2(transform.q.c, transform.q.s) * radius, color.ToRaylib());
+        // }
+        //
+        // private static void DrawSolidCapsule(in B2Vec2 point1, in B2Vec2 point2, float radius, B2HexColor color, object o)
+        // {
+        //     Vector2 p1 = point1.ToVec2();
+        //     Vector2 p2 = point2.ToVec2();
+        //     Raylib.DrawCircleV(p1, radius, color.ToRaylib());
+        //     Raylib.DrawCircleV(p2, radius, color.ToRaylib());
+        //     Raylib.DrawLineEx(p1, p2, radius, color.ToRaylib());
+        // }
+        //
+        // private static void DrawSegment(in B2Vec2 point1, in B2Vec2 point2, B2HexColor color, object o)
+        // {
+        //     Vector2 p1 = point1.ToVec2();
+        //     Vector2 p2 = point2.ToVec2();
+        //     Raylib.DrawLineV(p1, p2, color.ToRaylib());
+        // }
+        //
+        // private static void DrawTransform(in B2Transform transform, object o)
+        // {
+        //     DrawSolidCircle(transform, 4, B2HexColor.b2_colorAqua, o);
+        // }
+        //
+        // private static void DrawPoint(in B2Vec2 point, float size, B2HexColor color, object o)
+        // {
+        //     Raylib.DrawCircleV(point.ToVec2(), size, color.ToRaylib());
+        // }
+        //
+        // private static void DrawString(in B2Vec2 point, string s, B2HexColor color, object o)
+        // {
+        //     Vector2 p = point.ToVec2();
+        //     Raylib.DrawText(s, (int)p.X, (int)p.Y, 4, color.ToRaylib());
+        // }
     }
 }

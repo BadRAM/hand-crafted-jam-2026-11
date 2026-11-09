@@ -1,5 +1,5 @@
 using System.Numerics;
-using Box2D.NET;
+using Box2D;
 using Raylib_cs;
 
 namespace GameLibrary;
@@ -25,17 +25,7 @@ public static class Utils
         return new Vector2(MathF.Sin(angle), MathF.Cos(angle)) * length;
     }
     
-    public static B2Vec2 ToB2(this Vector2 vec)
-    {
-        return new B2Vec2(vec.X, vec.Y);
-    }
-
-    public static Vector2 ToVec2(this B2Vec2 vec)
-    {
-        return new Vector2(vec.X, vec.Y);
-    }
-    
-    public static Color ToRaylib(this B2HexColor color)
+    public static Color ToRaylib(this HexColor color)
     {
         int i = (int)color;        
         return new Color((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF, 255);

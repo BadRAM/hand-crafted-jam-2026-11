@@ -1,0 +1,3 @@
+libbox2d is the sketchy one compiled with -pthread
+
+libbox2dd is the one that is left over when you compile unmodified but it fails
