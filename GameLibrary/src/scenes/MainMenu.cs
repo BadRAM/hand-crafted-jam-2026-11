@@ -172,6 +172,11 @@ public class MainMenu : Scene
                 {
                     Resources.Sounds["menu_click"].Play();
                     Assets.Dialogues[51].PlayIfUnheard();
+                    Game.AppContainer.Alert("Snooping as usual I see!");
+
+                    Image img = Raylib.GenImageCellular(512, 512, 10);
+                    Game.AppContainer.SaveImageToDisk(img, "coolpix");
+                    Raylib.UnloadImage(img);
                 }
             }
         }

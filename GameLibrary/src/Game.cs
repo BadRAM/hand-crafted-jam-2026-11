@@ -5,6 +5,8 @@ namespace GameLibrary;
 
 public static class Game
 {
+    public static IAppContainer AppContainer;
+    
     public static bool IsWeb;
     public static bool ShouldQuit;
     public static string Dir = "";
@@ -59,7 +61,7 @@ public static class Game
 
         PortalView = Resources.Sprites["site1"];
         
-        ActiveScene = new IntroScene();
+        ActiveScene = new MainMenu(true);
         
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Blank);

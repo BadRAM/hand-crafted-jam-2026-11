@@ -15,7 +15,7 @@ public class SoundResource
         Raylib.SetSoundVolume(_soundBuffer[0], 0.75f);
     }
     
-    public void Play(float pan = 0.5f, float pitch = 1f, float volume = 0.75f)
+    public void Play(float pan = 0f, float pitch = 1f, float volume = 0.75f)
     {
         if (_lastPlayed == Time.Frame) return;
         if (Raylib.IsSoundPlaying(_soundBuffer[_bufferIndex])) // Extend buffer on overlap
@@ -33,7 +33,7 @@ public class SoundResource
         _lastPlayed = Time.Frame;
     }
 
-    public void PlayRandomPitch(float pan = 0.5f, float pitch = 1f, float volume = 0.75f)
+    public void PlayRandomPitch(float pan = 0f, float pitch = 1f, float volume = 0.75f)
     {
         Play(pan, pitch * (0.8f + Random.Shared.NextSingle() * 0.4f), volume);
     }

@@ -16,6 +16,7 @@ public class MusicAsset
     {
         Music = music;
         Music.Looping = false;
+        Raylib.SetMusicPan(Music, 0);
         Title = title;
         ArtistName = artistName;
         BeatsPerMinute = beatsPerMinute;

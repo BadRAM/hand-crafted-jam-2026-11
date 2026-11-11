@@ -18,7 +18,8 @@
     <DefineConstants>$(DefineConstants);BROWSER</DefineConstants>
 
     <EmccFlags>$(EmccFlags) -sALLOW_MEMORY_GROWTH=1 -sINITIAL_MEMORY=64MB</EmccFlags>
-
+    <EmccExtraLDFlags>-s FORCE_FILESYSTEM=1</EmccExtraLDFlags>
+    
     <!-- Optimization higher than -O1 causes build failure? -->
     <EmccLinkOptimizationFlag>-O1</EmccLinkOptimizationFlag>
     <EmccCompileOptimizationFlag>-O1</EmccCompileOptimizationFlag>

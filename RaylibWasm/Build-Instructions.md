@@ -1,5 +1,5 @@
 To build, start in solution root and run:   
-`dotnet publish -c Release`
+`dotnet publish .\RaylibWasm\RaylibWasm.csproj -f net10.0 -r browser-wasm -c Release`
 
 To test, run:  
 `dotnet serve --mime .wasm=application/wasm --mime .js=text/javascript --mime .json=application/json --directory RaylibWasm/bin/Release/net10.0/browser-wasm/AppBundle`

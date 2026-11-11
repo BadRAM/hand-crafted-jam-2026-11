@@ -79,6 +79,14 @@ public static class Resources
             Shaders.Add(fileName.Substring(0, fileName.Length - 4), Raylib.LoadShader("", shaderPath));
         }
         
+        // Just lag at the start to load asap.
+        while (LateLoadActions.Count > 0)
+        {
+            LateLoad();
+        }
+
+        LateLoad();
+        
         Console.WriteLine("All game files loaded OK!");
     }
 

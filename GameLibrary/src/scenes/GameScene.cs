@@ -46,7 +46,7 @@ public class GameScene : Scene
         B2WorldDef worldDef = b2DefaultWorldDef();
         
         worldDef.gravity = new B2Vec2(0.0f, 0.0f);
-        worldDef.hitEventThreshold = 15f;
+        worldDef.hitEventThreshold = 10f;
         WorldId = b2CreateWorld(worldDef);
         
         Assets.Dialogues[2].PlayIfUnheard(true);
@@ -67,6 +67,8 @@ public class GameScene : Scene
         {
             Mixer.PlayNextMusic();
         }
+        Mixer.Pause();
+        // Mixer.MusicPlaying?.Stop();
         
         Assets.Dialogues[48].HasBeenPlayed = false;
         Assets.Dialogues[49].HasBeenPlayed = false;
@@ -133,14 +135,15 @@ public class GameScene : Scene
         for (var i = 0; i < contactEvents.hitCount; i++)
         {
             var contact = contactEvents.hitEvents[i];
+            float pan = Math.Clamp((contact.point.ToVec2().X - 36) / 36, -1, 1);
             // Raylib.DrawCircleV(contact.point.ToVec2() * 10, 3, new Color(255, 0, 0, 192));
             float volume = 0.3f;
-            if      (contact.approachSpeed > 40) { Resources.Sounds["collision1"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 1f   * volume); }
-            else if (contact.approachSpeed > 35) { Resources.Sounds["collision2"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.9f * volume); }
-            else if (contact.approachSpeed > 30) { Resources.Sounds["collision3"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.8f * volume); }
-            else if (contact.approachSpeed > 25) { Resources.Sounds["collision4"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.7f * volume); }
-            else if (contact.approachSpeed > 20) { Resources.Sounds["collision5"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.6f * volume); }
-            else                                 { Resources.Sounds["collision6"].PlayRandomPitch(1 - (contact.point.ToVec2().X / 72), 1f, 0.5f * volume); }
+            if      (contact.approachSpeed > 40) { Resources.Sounds["collision1"].PlayRandomPitch(pan, 1f, 1f   * volume); }
+            else if (contact.approachSpeed > 35) { Resources.Sounds["collision2"].PlayRandomPitch(pan, 1f, 0.9f * volume); }
+            else if (contact.approachSpeed > 30) { Resources.Sounds["collision3"].PlayRandomPitch(pan, 1f, 0.8f * volume); }
+            else if (contact.approachSpeed > 25) { Resources.Sounds["collision4"].PlayRandomPitch(pan, 1f, 0.7f * volume); }
+            else if (contact.approachSpeed > 20) { Resources.Sounds["collision5"].PlayRandomPitch(pan, 1f, 0.6f * volume); }
+            else                                 { Resources.Sounds["collision6"].PlayRandomPitch(pan, 1f, 0.5f * volume); }
             // Console.WriteLine($"BALLS COLLIDING with speed:{contact.approachSpeed:N5} at: {contact.point.ToVec2()}");
         }
 
