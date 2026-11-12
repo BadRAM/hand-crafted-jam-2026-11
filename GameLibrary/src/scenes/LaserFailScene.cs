@@ -6,7 +6,7 @@ namespace GameLibrary;
 public class LaserFailScene : Scene
 {
     private int _step;
-    private AnimCurve<float> _stepProgress = new AnimCurve<float>(0);
+    private Interpolator<float> _stepProgress = new Interpolator<float>(0);
     private Sound _portalOpenSound;
     private DialogueAsset _tunnelingRemark;
     private DialogueAsset _siteRemark;
@@ -35,7 +35,7 @@ public class LaserFailScene : Scene
         {
             Mixer.ClearDialogue();
             _tunnelingRemark.Play(true);
-            _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+            _stepProgress = new Interpolator<float>(0, 1, 1);
             Game.MoveDevice(new Vector2(180, 540), 0.5f,  1);
             _step++;
         }
@@ -46,7 +46,7 @@ public class LaserFailScene : Scene
                 Raylib.PlaySound(_portalOpenSound);
                 Game.PortalView = _siteImage;
                 Game.OpenPortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -55,7 +55,7 @@ public class LaserFailScene : Scene
             if (_stepProgress.IsComplete())
             {
                 _siteRemark.Play(true);
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -65,7 +65,7 @@ public class LaserFailScene : Scene
             {
                 Resources.Sounds["laser"].Play(volume:1);
                 Game.FireLaser = true;
-                _stepProgress = AnimCurve.NewFloat(0, 1, 2);
+                _stepProgress = new Interpolator<float>(0, 1, 2);
                 _step++;
             }
         }
@@ -77,7 +77,7 @@ public class LaserFailScene : Scene
                 Raylib.StopSound(_portalOpenSound);
                 Game.PortalView = Resources.Sprites["site_dead"];
                 Resources.Sounds["portal_close"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(1, 0, 1);
+                _stepProgress = new Interpolator<float>(1, 0, 1);
                 _step++;
             }
         }
@@ -88,7 +88,7 @@ public class LaserFailScene : Scene
             {
                 Game.ClosePortal();
                 Game.FireLaser = false;
-                _stepProgress = AnimCurve.NewFloat(0, 1, 2);
+                _stepProgress = new Interpolator<float>(0, 1, 2);
                 _step++;
             }
         }

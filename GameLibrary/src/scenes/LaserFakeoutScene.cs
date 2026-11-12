@@ -6,7 +6,7 @@ namespace GameLibrary;
 public class LaserFakeoutScene : Scene
 {
     private int _step;
-    private AnimCurve<float> _stepProgress = new AnimCurve<float>(0);
+    private Interpolator<float> _stepProgress = new Interpolator<float>(0);
     private Sound _portalOpenSound;
     private DialogueAsset _tunnelingRemark;
     private DialogueAsset _siteRemark1;
@@ -39,7 +39,7 @@ public class LaserFakeoutScene : Scene
         {
             Mixer.ClearDialogue();
             _tunnelingRemark.Play(true);
-            _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+            _stepProgress = new Interpolator<float>(0, 1, 1);
             Game.MoveDevice(new Vector2(180, 540), 0.5f,  1);
             _step++;
         }
@@ -50,7 +50,7 @@ public class LaserFakeoutScene : Scene
                 Raylib.PlaySound(_portalOpenSound);
                 Game.PortalView = _siteImage1;
                 Game.OpenPortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -59,7 +59,7 @@ public class LaserFakeoutScene : Scene
             if (_stepProgress.IsComplete())
             {
                 _siteRemark1.Play(true);
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -68,7 +68,7 @@ public class LaserFakeoutScene : Scene
             if (!Mixer.IsDialoguePlaying() && _stepProgress.IsComplete())
             {
                 Game.ClosePortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -79,7 +79,7 @@ public class LaserFakeoutScene : Scene
                 Raylib.PlaySound(_portalOpenSound);
                 Game.PortalView = _siteImage2;
                 Game.OpenPortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -88,7 +88,7 @@ public class LaserFakeoutScene : Scene
             if (_stepProgress.IsComplete())
             {
                 _siteRemark2.Play(true);
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -98,7 +98,7 @@ public class LaserFakeoutScene : Scene
             {
                 Resources.Sounds["laser"].Play(volume:1);
                 Game.FireLaser = true;
-                _stepProgress = AnimCurve.NewFloat(0, 1, 2);
+                _stepProgress = new Interpolator<float>(0, 1, 2);
                 _step++;
             }
         }
@@ -110,7 +110,7 @@ public class LaserFakeoutScene : Scene
                 Raylib.StopSound(_portalOpenSound);
                 Game.PortalView = Resources.Sprites["site_dead"];
                 Resources.Sounds["portal_close"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(1, 0, 1);
+                _stepProgress = new Interpolator<float>(1, 0, 1);
                 _step++;
             }
         }
@@ -121,7 +121,7 @@ public class LaserFakeoutScene : Scene
             {
                 Game.ClosePortal();
                 Game.FireLaser = false;
-                _stepProgress = AnimCurve.NewFloat(0, 1, 2);
+                _stepProgress = new Interpolator<float>(0, 1, 2);
                 _step++;
             }
         }

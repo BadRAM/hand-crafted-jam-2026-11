@@ -29,8 +29,8 @@ public class GameScene : Scene
     private int _combo;
     private float _lastClear;
     private List<ScoreAnim> _scoreAnims = new List<ScoreAnim>();
-    private AnimCurve<float> _drainAnim = new AnimCurve<float>(1);
-    private AnimCurve<float> _instructionTextRadius = new AnimCurve<float>(-280);
+    private Interpolator<float> _drainAnim = new Interpolator<float>(1);
+    private Interpolator<float> _instructionTextRadius = new Interpolator<float>(-280);
     private bool _overflow;
 
     private State _state = State.Gaming;
@@ -84,7 +84,7 @@ public class GameScene : Scene
         {
             BackgroundDraw.Web(1 - _drainAnim.Sample());
             BackgroundDraw.Spiral(_drainAnim.Sample());
-            if (_drainAnim.Start < _drainAnim.End)
+            if (_drainAnim.StartValue < _drainAnim.EndValue)
             {
                 BackgroundDraw.ChargeMeter(1 - _drainAnim.Sample());
             }
@@ -235,8 +235,8 @@ public class GameScene : Scene
         if (_displayedScore < _score - 3000) _displayedScore += 200;
         if (_displayedScore > _score) _displayedScore -= 500;
         if (_displayedScore < _score) _displayedScore += 10;
-        if (!Game.IsScrolling() && _instructionTextRadius.End > -260) _instructionTextRadius = AnimCurve.NewFloat(_instructionTextRadius.Sample(), -280, 0.5f, Easings.OutQuad);
-        if ( Game.IsScrolling() && _instructionTextRadius.End < -260) _instructionTextRadius = AnimCurve.NewFloat(_instructionTextRadius.Sample(), -240, 0.5f, Easings.OutQuad);
+        if (!Game.IsScrolling() && _instructionTextRadius.EndValue > -260) _instructionTextRadius = new Interpolator<float>(_instructionTextRadius.Sample(), -280, 0.5f, easing: Easings.OutQuad);
+        if ( Game.IsScrolling() && _instructionTextRadius.EndValue < -260) _instructionTextRadius = new Interpolator<float>(_instructionTextRadius.Sample(), -240, 0.5f, easing: Easings.OutQuad);
         ImGui.DrawTextRadial(0, _instructionTextRadius.Sample(), Game.Level.GetGoalText(this));
         // ImGui.DrawTextRadial(0, -240, $"Balls: {_balls.Count}");
         if (_combo > 1)
@@ -373,7 +373,7 @@ public class GameScene : Scene
         _score = 0;
         _displayedScore = 0;
         _state = State.Draining;
-        _drainAnim = AnimCurve.NewFloat(0, 1, 2, Easings.OutQuad);
+        _drainAnim = new Interpolator<float>(0, 1, 2, easing: Easings.OutQuad);
         Resources.Sounds["game_end"].Play();
     }
     
@@ -591,8 +591,8 @@ public class GameScene : Scene
     public class ScoreAnim
     {
         private string _text;
-        private AnimCurve<float> _anim = AnimCurve.NewFloat(0, 1, 2);
-        private AnimCurve<float> _mergeAnim = AnimCurve.NewFloat(0, 1, 0.35f);
+        private Interpolator<float> _anim = new Interpolator<float>(0, 1, 2);
+        private Interpolator<float> _mergeAnim = new Interpolator<float>(0, 1, 0.35f);
         private Vector2 _pos;
         private List<Ball> _balls;
 

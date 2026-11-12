@@ -27,14 +27,14 @@ public static class Game
 
     private static RenderTexture2D _portalEdgeRenderTarget;
     private static RenderTexture2D _portalViewRenderTarget;
-    public static AnimCurve<float> PortalSize = new AnimCurve<float>(0);
+    public static Interpolator<float> PortalSize = new Interpolator<float>(0);
     public static Sprite PortalView;
 
     public static bool FireLaser;
     private static Vector2 _deviceShake;
     public static float LaserGlare;
     
-    private static AnimCurve<Camera2D> _deviceCameraAnim = new AnimCurve<Camera2D>(new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1));
+    private static Interpolator<Camera2D> _deviceCameraAnim = new Interpolator<Camera2D>(new Camera2D(Vector2.Zero, Vector2.Zero, 0, 1));
     
     private static ConfigFlags _defaultFlags = ConfigFlags.TransparentWindow | ConfigFlags.UndecoratedWindow | ConfigFlags.Msaa4xHint;
     private static Vector2 _lastWindowDelta;
@@ -61,7 +61,8 @@ public static class Game
 
         PortalView = Resources.Sprites["site1"];
         
-        ActiveScene = new MainMenu(true);
+        // ActiveScene = new MainMenu(true);
+        ActiveScene = new IntroScene();
         
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Blank);
@@ -145,12 +146,12 @@ public static class Game
         Raylib.EndTextureMode();
         _activeCamera = _defaultCamera;
 
-        _deviceCameraAnim.End.Offset -= _deviceShake;
+        _deviceCameraAnim.EndValue.Offset -= _deviceShake;
         _deviceShake = Vector2.Zero;
         if (FireLaser) 
         {
             _deviceShake = Random.Shared.InsideUnitCircle() * 4;
-            _deviceCameraAnim.End.Offset += _deviceShake;
+            _deviceCameraAnim.EndValue.Offset += _deviceShake;
             Vector2 laserShake = Random.Shared.InsideUnitCircle() * 4;
             Resources.Sprites["laser_halo"].Draw(laserShake, tint: Raylib.ColorFromHSV((Mixer.Beat()/2 * 360f) % 360f, 1f, 1f));
             Resources.Sprites["laser_core"].Draw(laserShake);
@@ -197,12 +198,12 @@ public static class Game
         {
             Resources.Sounds["whoosh"].Play();
         }
-        _deviceCameraAnim = AnimCurve.NewCamera2D
+        _deviceCameraAnim = new Interpolator<Camera2D>
         (
             _deviceCameraAnim.Sample(),
             new Camera2D(center, new Vector2(360, 360), 0, zoom), 
             duration, 
-            easing ?? Easings.OutQuint
+            easing: easing ?? Easings.OutQuint
         );
     }
     
@@ -316,6 +317,6 @@ public static class Game
     
     public static Camera2D GetActiveCamera() => _activeCamera;
     
-    public static void OpenPortal()  => PortalSize = AnimCurve.NewFloat(0, 720, 1, Easings.OutQuart);
-    public static void ClosePortal() => PortalSize = AnimCurve.NewFloat(720, 0, 1, Easings.InQuart);
+    public static void OpenPortal()  => PortalSize = new Interpolator<float>(0, 720, 1, easing: Easings.OutQuart);
+    public static void ClosePortal() => PortalSize = new Interpolator<float>(720, 0, 1, easing: Easings.InQuart);
 }

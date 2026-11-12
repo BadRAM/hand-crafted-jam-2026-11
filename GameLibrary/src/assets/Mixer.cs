@@ -8,7 +8,7 @@ public static class Mixer
     public static bool IsPaused = false;
     public static List<MusicAsset> Playlist = new List<MusicAsset>();
     public static MusicAsset? MusicPlaying;
-    private static AnimCurve<float> _musicFade = new AnimCurve<float>(FullVolume);
+    private static Interpolator<float> _musicFade = new Interpolator<float>(FullVolume);
     public static List<DialogueAsset> DialogueQueue = new List<DialogueAsset>();
     public static DialogueAsset? DialoguePlaying;
 
@@ -31,7 +31,7 @@ public static class Mixer
         if (DialoguePlaying != null && !DialoguePlaying.IsPlaying())
         {
             DialoguePlaying = null;
-            _musicFade = AnimCurve.NewFloat(_musicFade.Sample(), FullVolume, 1);
+            _musicFade = new Interpolator<float>(_musicFade.Sample(), FullVolume, 1);
         }
 
         if (DialoguePlaying == null && DialogueQueue.Count > 0)
@@ -40,7 +40,7 @@ public static class Mixer
             {
                 if (_musicFade.Sample() > ReducedVolume + 0.1f)
                 {
-                    _musicFade = AnimCurve.NewFloat(_musicFade.Sample(), ReducedVolume, 0.5f);
+                    _musicFade = new Interpolator<float>(_musicFade.Sample(), ReducedVolume, 0.5f);
                 }
                 else
                 {
@@ -75,7 +75,7 @@ public static class Mixer
     {
         IsPaused = false;
         AutoPlay = true;
-        _musicFade = AnimCurve.NewFloat(0, FullVolume, 1);
+        _musicFade = new Interpolator<float>(0, FullVolume, 1);
         MusicPlaying?.Stop();
         MusicPlaying = music;
         MusicPlaying.Play();

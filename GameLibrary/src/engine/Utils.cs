@@ -71,4 +71,28 @@ public static class Utils
         rect.Height *= -1;
         return rect;
     }
+    
+    public static float Lerp(this float a, float b, float t) => a + t * (b - a);
+    
+    public static Rectangle LerpRectangle(Rectangle a, Rectangle b, float t)
+    {
+        Rectangle result = new Rectangle()
+        {
+            Position = Vector2.Lerp(a.Position, b.Position, t),
+            Size = Vector2.Lerp(a.Size, b.Size, t),
+        };
+        return result;
+    }
+    
+    public static Camera2D LerpCamera2D(Camera2D a, Camera2D b, float t)
+    {
+        Camera2D result = new Camera2D()
+        {
+            Target = Vector2.Lerp(a.Target, b.Target, t),
+            Offset = Vector2.Lerp(a.Offset, b.Offset, t),
+            Rotation = float.Lerp(a.Rotation, b.Rotation, t),
+            Zoom = float.Lerp(a.Zoom, b.Zoom, t),
+        };
+        return result;
+    }
 }

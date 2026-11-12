@@ -6,7 +6,7 @@ namespace GameLibrary;
 public class EndingScene : Scene
 {
     private int _step;
-    private AnimCurve<float> _stepProgress = new AnimCurve<float>(0);
+    private Interpolator<float> _stepProgress = new Interpolator<float>(0);
     private Sound _portalOpenSound;
 
     public EndingScene()
@@ -33,7 +33,7 @@ public class EndingScene : Scene
             Mixer.Pause();
             Mixer.ClearDialogue();
             Assets.Dialogues[38].Play(true);
-            _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+            _stepProgress = new Interpolator<float>(0, 1, 1);
             _step++;
         }
         else if (_step == 1)
@@ -42,7 +42,7 @@ public class EndingScene : Scene
             {
                 Game.MoveDevice(new Vector2( 90, 630), 0.25f, 5);
                 
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -53,7 +53,7 @@ public class EndingScene : Scene
                 Game.PortalView = Resources.Sprites["site_dead"];
                 Raylib.PlaySound(_portalOpenSound);
                 Game.OpenPortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -62,7 +62,7 @@ public class EndingScene : Scene
             if (_stepProgress.IsComplete())
             {
                 Resources.Sounds["throb"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -74,7 +74,7 @@ public class EndingScene : Scene
                 Raylib.StopSound(_portalOpenSound);
                 Game.PortalView = Resources.Sprites["site1"];
                 Resources.Sounds["portal_close"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(1, 0, 1);
+                _stepProgress = new Interpolator<float>(1, 0, 1);
                 _step++;
             }
         }
@@ -85,7 +85,7 @@ public class EndingScene : Scene
             {
                 Game.ClosePortal();
                 Game.FireLaser = false;
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -96,7 +96,7 @@ public class EndingScene : Scene
                 Game.PortalView = Resources.Sprites["site_dead"];
                 Raylib.PlaySound(_portalOpenSound);
                 Game.OpenPortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -105,7 +105,7 @@ public class EndingScene : Scene
             if (_stepProgress.IsComplete())
             {
                 Resources.Sounds["throb"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -117,7 +117,7 @@ public class EndingScene : Scene
                 Raylib.StopSound(_portalOpenSound);
                 Game.PortalView = Resources.Sprites["site2"];
                 Resources.Sounds["portal_close"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(1, 0, 1);
+                _stepProgress = new Interpolator<float>(1, 0, 1);
                 _step++;
             }
         }
@@ -127,7 +127,7 @@ public class EndingScene : Scene
             if (_stepProgress.IsComplete())
             {
                 Game.ClosePortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -138,7 +138,7 @@ public class EndingScene : Scene
                 Game.PortalView = Resources.Sprites["site_dead"];
                 Raylib.PlaySound(_portalOpenSound);
                 Game.OpenPortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -147,7 +147,7 @@ public class EndingScene : Scene
             if (_stepProgress.IsComplete())
             {
                 Resources.Sounds["throb"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -159,7 +159,7 @@ public class EndingScene : Scene
                 Raylib.StopSound(_portalOpenSound);
                 Game.PortalView = Resources.Sprites["site3"];
                 Resources.Sounds["portal_close"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(1, 0, 1);
+                _stepProgress = new Interpolator<float>(1, 0, 1);
                 _step++;
             }
         }
@@ -169,7 +169,7 @@ public class EndingScene : Scene
             if (_stepProgress.IsComplete())
             {
                 Game.ClosePortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -180,7 +180,7 @@ public class EndingScene : Scene
                 Game.PortalView = Resources.Sprites["site5"];
                 Raylib.PlaySound(_portalOpenSound);
                 Game.OpenPortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -189,7 +189,7 @@ public class EndingScene : Scene
             if (_stepProgress.IsComplete())
             {
                 // Resources.Sounds["throb"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -201,7 +201,7 @@ public class EndingScene : Scene
                 Raylib.StopSound(_portalOpenSound);
                 Game.PortalView = Resources.Sprites["site5"];
                 Resources.Sounds["portal_close"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(1, 0, 1);
+                _stepProgress = new Interpolator<float>(1, 0, 1);
                 _step++;
             }
         }
@@ -211,7 +211,7 @@ public class EndingScene : Scene
             if (_stepProgress.IsComplete())
             {
                 Game.ClosePortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -222,7 +222,7 @@ public class EndingScene : Scene
                 Game.PortalView = Resources.Sprites["site_dead"];
                 Raylib.PlaySound(_portalOpenSound);
                 Game.OpenPortal();
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -231,7 +231,7 @@ public class EndingScene : Scene
             if (_stepProgress.IsComplete())
             {
                 Resources.Sounds["throb"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(0, 1, 1);
+                _stepProgress = new Interpolator<float>(0, 1, 1);
                 _step++;
             }
         }
@@ -243,7 +243,7 @@ public class EndingScene : Scene
                 Raylib.StopSound(_portalOpenSound);
                 Game.PortalView = Resources.Sprites["site4"];
                 Resources.Sounds["portal_close"].Play(volume:1);
-                _stepProgress = AnimCurve.NewFloat(1, 0, 1);
+                _stepProgress = new Interpolator<float>(1, 0, 1);
                 _step++;
             }
         }

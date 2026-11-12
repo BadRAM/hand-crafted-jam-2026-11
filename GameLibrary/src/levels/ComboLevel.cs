@@ -4,7 +4,7 @@ public class ComboLevel : Level
 {
     private int _comboTarget;
     private int _prevCombo;
-    private AnimCurve<float> _progressCurve = new AnimCurve<float>(0);
+    private Interpolator<float> _progressCurve = new Interpolator<float>(0);
     
     public ComboLevel(string message, int comboTarget, DialogueAsset? smallTalk, Action targetReachedAction) : base(message, smallTalk, targetReachedAction)
     {

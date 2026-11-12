@@ -4,7 +4,7 @@ public class MakeBombLevel : Level
 {
     private int _bombsCount;
     private int _bombsTarget;
-    private AnimCurve<float> _progressCurve = new AnimCurve<float>(0);
+    private Interpolator<float> _progressCurve = new Interpolator<float>(0);
     
     public MakeBombLevel(string message, int bombsTarget, DialogueAsset? smallTalk, Action targetReachedAction) : base(message, smallTalk, targetReachedAction)
     {
@@ -19,9 +19,9 @@ public class MakeBombLevel : Level
 
     public override void Update(GameScene gameScene)
     {
-        if (Math.Abs(_progressCurve.End - (float)gameScene.GetCombo() / _bombsTarget) > 0.001f)
+        if (Math.Abs(_progressCurve.EndValue - (float)gameScene.GetCombo() / _bombsTarget) > 0.001f)
         {
-            _progressCurve = AnimCurve.NewFloat(_progressCurve.Sample(), (float)gameScene.GetCombo() / _bombsTarget, 0.5f, easing: Easings.OutCubic);
+            _progressCurve = new Interpolator<float>(_progressCurve.Sample(), (float)gameScene.GetCombo() / _bombsTarget, 0.5f, easing: Easings.OutCubic);
         }
     }
 

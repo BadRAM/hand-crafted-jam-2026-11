@@ -8,13 +8,13 @@ public class MainMenu : Scene
     private Music _menuMusic = Resources.Musics["null_function"];
     
     private List<Font> _testFonts = new List<Font>();
-    private AnimCurve<float> _loadAnim = new AnimCurve<float>(1);
-    private AnimCurve<float> _menuMoveAnim = new AnimCurve<float>(0);
+    private Interpolator<float> _loadAnim = new Interpolator<float>(1);
+    private Interpolator<float> _menuMoveAnim = new Interpolator<float>(0);
     
     public MainMenu(bool fromBlack)
     {
         Mixer.Playlist = Assets.Musics.Values.ToList();
-        if (fromBlack) _loadAnim = AnimCurve.NewFloat(0, 1, 1);
+        if (fromBlack) _loadAnim = new Interpolator<float>(0, 1, 1);
         Assets.Dialogues[1].PlayIfUnheard();
 
         if (Game.LevelIndex == 5)
@@ -190,17 +190,17 @@ public class MainMenu : Scene
         if (option == 1)
         {
             Resources.Sounds["menu_left"].Play();
-            _menuMoveAnim = AnimCurve.NewFloat(_menuMoveAnim.Sample(), _menuMoveAnim.Sample() - 90, 0.5f, Easings.InOutSine);
+            _menuMoveAnim = new Interpolator<float>(_menuMoveAnim.Sample(), _menuMoveAnim.Sample() - 90, 0.5f, easing: Easings.InOutSine);
         }
         else if (option == 2)
         {
             Resources.Sounds["menu_right"].Play();
-            _menuMoveAnim = AnimCurve.NewFloat(_menuMoveAnim.Sample(), _menuMoveAnim.Sample() + 180, 0.5f, Easings.InOutSine);
+            _menuMoveAnim = new Interpolator<float>(_menuMoveAnim.Sample(), _menuMoveAnim.Sample() + 180, 0.5f, easing: Easings.InOutSine);
         }
         else if (option == 3)
         {
             Resources.Sounds["menu_left"].Play();
-            _menuMoveAnim = AnimCurve.NewFloat(_menuMoveAnim.Sample(), _menuMoveAnim.Sample() + 90, 0.5f, Easings.InOutSine);
+            _menuMoveAnim = new Interpolator<float>(_menuMoveAnim.Sample(), _menuMoveAnim.Sample() + 90, 0.5f, easing: Easings.InOutSine);
         }
     }
 }
