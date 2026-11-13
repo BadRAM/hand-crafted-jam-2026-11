@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <PackageReference Include="Box2D.NET" Version="3.1.654" />
+      <PackageReference Include="Newtonsoft.Json" Version="14.0.1-beta2" />
       <PackageReference Include="Raylib-cs" Version="8.1.0" />
     </ItemGroup>
 
@@ -21,5 +22,9 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="src\levels\" />
     </ItemGroup>
 </Project>

@@ -3,14 +3,12 @@ namespace GameLibrary;
 public abstract class Level
 {
     public string Message;
-    public DialogueAsset? SmallTalk;
     public Action TargetReachedAction;
     private Interpolator<float> _progressCurve;
 
-    protected Level(string message, DialogueAsset? smallTalk, Action targetReachedAction)
+    protected Level(string message, Action targetReachedAction)
     {
         Message = message;
-        SmallTalk = smallTalk;
         TargetReachedAction = targetReachedAction;
         _progressCurve = new Interpolator<float>(0);
     }
