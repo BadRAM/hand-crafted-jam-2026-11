@@ -11,5 +11,6 @@ public class IntroScene : Scene
     
     public override void Update()
     {
+        Game.ActiveScene = new MenuScene();
     }
 }

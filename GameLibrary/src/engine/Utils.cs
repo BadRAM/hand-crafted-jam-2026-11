@@ -72,6 +72,19 @@ public static class Utils
         return rect;
     }
     
+    public static Vector2 Normalized(this Vector2 vector) => vector == Vector2.Zero ? Vector2.Zero : Vector2.Normalize(vector);
+
+    public static Vector2 MoveTowards(this Vector2 start, Vector2 target, float maxDistanceDelta)
+    {
+        Vector2 delta = target - start;
+        if (delta.Length() < maxDistanceDelta)
+        {
+            return target;
+        }
+        Vector2 ret = start + delta.Normalized() * (float)maxDistanceDelta;
+        return ret;
+    }
+    
     public static float Lerp(this float a, float b, float t) => a + t * (b - a);
     
     public static Rectangle LerpRectangle(Rectangle a, Rectangle b, float t)

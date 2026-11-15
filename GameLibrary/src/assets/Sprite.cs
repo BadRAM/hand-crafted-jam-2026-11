@@ -16,7 +16,7 @@ public class Sprite
     public Sprite(string path)
     {
         Texture = Raylib.LoadTexture(path);
-        Raylib.SetTextureFilter(Texture, TextureFilter.Bilinear);
+        Raylib.SetTextureFilter(Texture, TextureFilter.Point);
         if (Texture.Width == 512 && Texture.Height == 512) // Bwahahahaha it's the last day I can do whatever I want!
         {
             Raylib.SetTextureWrap(Texture, TextureWrap.Repeat);

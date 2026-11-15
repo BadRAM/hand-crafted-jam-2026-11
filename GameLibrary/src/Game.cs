@@ -26,15 +26,15 @@ public static class Game
     {
         IsWeb = isWeb;
         Raylib.SetConfigFlags(_defaultFlags);
-        Raylib.InitWindow(720, 720, "Cool Game :)");
+        Raylib.InitWindow(960, 720, "Cool Game :)");
         Raylib.SetTargetFPS(Time.FrameRate);
         Raylib.InitAudioDevice();
         Raylib.SetExitKey(KeyboardKey.Null);
         
         Resources.Load();
         
-        ActiveScene = new MainMenu(true);
-        // ActiveScene = new IntroScene();
+        // ActiveScene = new MainMenu();
+        ActiveScene = new IntroScene();
         
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Blank);
@@ -47,7 +47,7 @@ public static class Game
         if (!IsWeb && Raylib.IsKeyPressed(KeyboardKey.F3)) DebugMode = !DebugMode;
         MouseCursor = MouseCursor.Default;
         
-        Mixer.Update();
+        // Mixer.Update();
         
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.Blank);
